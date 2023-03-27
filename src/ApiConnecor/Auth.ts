@@ -18,6 +18,24 @@ class Kommunalka {
   static getBills() {
     return RestClient.getAxios(cred + '/bills');
   }
+  static postBill(
+    coldWater: number,
+    createDate: string,
+    electric: number,
+    hotWater: number,
+    addPayment?: number[],
+  ) {
+    return RestClient.postAxios(cred + `/bills`, {
+      coldWater,
+      createDate,
+      electric,
+      hotWater,
+      addPayment,
+    });
+  }
+  static updateBill(obj: any, id: 'string') {
+    return RestClient.patchAxios(cred + `/bills/${id}`, obj);
+  }
 }
 
 export default Kommunalka;

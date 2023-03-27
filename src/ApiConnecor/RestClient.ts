@@ -44,6 +44,19 @@ class RestClient {
     };
     return axios(config);
   }
+
+  static patchAxios(url: string, data: any) {
+    const config = {
+      method: 'patch',
+      url: `${url}`,
+
+      headers: {
+        Authorization: 'Bearer ' + sessionStorage?.getItem('token'),
+      },
+      data: data,
+    };
+    return axios(config);
+  }
 }
 
 export default RestClient;
