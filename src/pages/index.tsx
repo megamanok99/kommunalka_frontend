@@ -4,14 +4,22 @@ import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import { useEffect } from 'react';
 import Kommunalka from '@/ApiConnecor/Auth';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  const router = useRouter();
   useEffect(() => {
-    Kommunalka.Authme().then((res) => {
-      console.log('registered');
-    });
+    Kommunalka.Authme()
+      .then((res) => {
+        console.log('registered');
+      })
+      .catch((err) => {
+        router.push('login');
+        console.log('нет авторизации');
+      });
   });
   return (
     <>
@@ -28,20 +36,7 @@ export default function Home() {
             <code className={styles.code}>src/pages</code>
           </p>
           <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer">
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+            <Link href={{ pathname: '/login' }}>авторизация</Link>
           </div>
         </div>
 

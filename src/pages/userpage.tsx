@@ -22,6 +22,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { SaveOutlined, RollbackOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 
 interface DataType {
   createDate?: Dayjs | null | undefined;
@@ -47,6 +48,7 @@ interface DataType {
 }
 
 export default function Login() {
+  const router = useRouter();
   // const locale = import('antd/es/date-picker/locale/ru_RU');
   const [bills, setBills] = useState<DataType[]>([]);
   const [user, setUser] = useState<any>([]);
@@ -285,10 +287,23 @@ export default function Login() {
   useEffect(() => {
     setBills(data);
     console.log('updated');
-    Kommunalka.Authme().then((res) => {
-      setUser(res.data);
+    form.setFieldsValue({
+      electric: data[data.length - 1]?.electric,
     });
+    Kommunalka.Authme()
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch(() => router.push('login'));
   }, [data]);
+
+  console.log('data в USEEFFECT => ', data);
+
+  const [form] = Form.useForm();
+
+  // form.setFieldsValue({
+  //   electric: data[data.length - 1]?.electric,
+  // });
 
   const editBill = (obj: DataType, id: any) => {
     Kommunalka.updateBill(obj, id).then(() => {
@@ -317,9 +332,12 @@ export default function Login() {
         //   hotWater: bills[bills.length - 1]?.hotWater,
         // }}
         name="registerBills"
-        // labelCol={{
-        //   span: 8,
-        // }}
+        labelCol={{
+          span: 8,
+        }}
+        labelWrap
+        colon={false}
+        labelAlign="left"
         // wrapperCol={{
         //   span: 16,
         // }}
@@ -350,6 +368,7 @@ export default function Login() {
           label="Электричество"
           style={{ WebkitTextFillColor: '#ffffffe0' }}
           name="electric"
+          labelCol={{ span: 24 }}
           // initialValue={bills[bills.length - 1]?.electric}
         >
           <InputNumber style={{ width: '100%' }} />
@@ -370,7 +389,7 @@ export default function Login() {
     );
   };
 
-  const form = Form.useFormInstance();
+  // const form = Form.useFormInstance();
   console.log(bills);
   return (
     <Card style={{ backgroundColor: '#E3EDF5', height: '100vh' }}>
