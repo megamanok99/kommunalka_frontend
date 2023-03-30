@@ -224,10 +224,8 @@ export default function Login() {
                     onClick={() => {
                       editBill(currentBill, id);
                     }}
-                    size="small"
-                    style={{ backgroundColor: '#OD2231' }}
-                    shape="circle"
-                    ghost>
+                    // style={{ backgroundColor: '#OD2231' }}
+                    shape="circle">
                     <SaveOutlined />
                   </Button>
                 </Tooltip>
@@ -236,7 +234,6 @@ export default function Login() {
                     style={{ padding: 0 }}
                     onClick={() => resetChanges()}
                     type="primary"
-                    size="small"
                     shape="circle"
                     ghost>
                     <RollbackOutlined />
@@ -266,12 +263,7 @@ export default function Login() {
                 // GuidesApi.deleteItem(this.props.endpoint, id).then(() => this.getAllData());
               }}>
               <Tooltip title="Удалить запись">
-                <Button
-                  className="actionRedButton"
-                  type="primary"
-                  size="small"
-                  shape="circle"
-                  ghost>
+                <Button className="actionRedButton" type="primary" shape="circle" ghost>
                   <DeleteOutlined />
                 </Button>
               </Tooltip>
@@ -359,7 +351,7 @@ export default function Login() {
         <Form.Item
           label="Горячая вода"
           name="hotWater"
-          style={{ WebkitTextFillColor: '#ffffffe0' }}
+          // style={{ WebkitTextFillColor: '#ffffffe0' }}
           // initialValue={bills[bills.length - 1]?.hotWater}
         >
           <InputNumber style={{ width: '100%' }} />
@@ -368,14 +360,14 @@ export default function Login() {
         <Form.Item
           label="Холодная вода"
           name="coldWater"
-          style={{ WebkitTextFillColor: '#ffffffe0' }}
+          // style={{ WebkitTextFillColor: '#ffffffe0' }}
           // initialValue={bills[bills.length - 1]?.coldWater}
         >
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item
           label="Электричество"
-          style={{ WebkitTextFillColor: '#ffffffe0' }}
+          // style={{ WebkitTextFillColor: '#ffffffe0' }}
           name="electric"
           labelCol={{ span: 24 }}
           // initialValue={bills[bills.length - 1]?.electric}
@@ -383,7 +375,7 @@ export default function Login() {
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item
-          style={{ WebkitTextFillColor: '#ffffffe0' }}
+          // style={{ WebkitTextFillColor: '#ffffffe0' }}
           label="Дата внесения"
           name="createDate">
           <DatePicker style={{ width: '100%' }} />
