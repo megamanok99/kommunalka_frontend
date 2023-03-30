@@ -14,6 +14,7 @@ import {
   Space,
   Tooltip,
   Popconfirm,
+  Typography,
 } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { AxiosResponse } from 'axios';
@@ -22,8 +23,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { SaveOutlined, RollbackOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
 
+import { useRouter } from 'next/router';
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import download from 'downloadjs';
+const { Title, Text } = Typography;
 interface DataType {
   createDate?: Dayjs | null | undefined;
   edit?: any;
@@ -283,9 +288,13 @@ export default function Login() {
     return (arr + arr2) * kef;
   };
   const { data } = useAxiosFetch(Kommunalka.getBills);
-
+  let node: any = document?.getElementById('my-node');
   useEffect(() => {
     setBills(data);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    node = document?.getElementById('my-node');
+
     console.log('updated');
     form.setFieldsValue({
       electric: data[data.length - 1]?.electric,
@@ -390,16 +399,87 @@ export default function Login() {
   };
 
   // const form = Form.useFormInstance();
+
   console.log(bills);
   return (
     <Card style={{ backgroundColor: '#E3EDF5', height: '100vh' }}>
-      <Row>
+      <Row gutter={[16, 16]}>
         <Col span={24}>
           <Table columns={columns} dataSource={bills} />
         </Col>
 
         <Col span={8}>
           <Card style={{ backgroundColor: '#0D2231' }}> {renderForm()}</Card>
+        </Col>
+        <Col span={16}>
+          <Button
+            onClick={() => {
+              if (node) {
+                htmlToImage
+                  .toPng(node)
+                  .then(function (dataUrl) {
+                    var img = new Image();
+                    img.src = dataUrl;
+                    // document.body.appendChild(img);
+
+                    download(dataUrl, 'my-node.png');
+                  })
+                  .catch(function (error) {
+                    console.error('oops, something went wrong!', error);
+                  });
+              }
+            }}>
+            test
+          </Button>
+          <Card
+            id="my-node"
+            style={{
+              backgroundColor: '#0D2231',
+              height: '100%',
+              // background: 'rgb(13,34,49)',
+              background:
+                'linear-gradient(63deg, rgba(13,34,49,1) 10%, rgba(17,90,120,1) 71%, rgba(47,134,170,1) 100%)',
+            }}>
+            <Space direction="vertical">
+              <Title style={{ color: 'white' }}>
+                Горячая вода: {bills[bills.length - 1]?.hotWater} м³{' '}
+              </Title>
+              <Title style={{ color: 'white' }}>
+                Холодная вода: {bills[bills.length - 1]?.coldWater} м³{' '}
+              </Title>
+              <Title style={{ color: 'white' }}>
+                Электричество: {bills[bills.length - 1]?.electric} Кв/ч{' '}
+              </Title>
+
+              <Title style={{ color: 'white' }}>
+                К оплате:{' '}
+                {totalSumm(
+                  user.ratioElec,
+                  bills[bills.length - 2]?.electric,
+                  bills[bills.length - 1]?.electric,
+                ) +
+                  totalSumm(
+                    user.ratioCold,
+                    bills[bills.length - 2]?.coldWater,
+                    bills[bills.length - 1]?.coldWater,
+                  ) +
+                  totalSumm(
+                    user.ratioHot,
+                    bills[bills.length - 2]?.hotWater,
+                    bills[bills.length - 1]?.hotWater,
+                  ) +
+                  summOfOtvod(
+                    user.avatarUrl,
+                    bills[bills.length - 1]?.hotWater - bills[bills.length - 2]?.hotWater,
+                    bills[bills.length - 1]?.coldWater - bills[bills.length - 2]?.coldWater,
+                  )}{' '}
+                руб.
+              </Title>
+              <Text style={{ position: 'absolute', color: 'white', bottom: 50, right: 50 }}>
+                Показания от: {`${dayjs(bills[bills.length - 1]?.createDate).format('DD.MM.YYYY')}`}
+              </Text>
+            </Space>
+          </Card>
         </Col>
       </Row>
     </Card>
