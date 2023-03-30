@@ -20,7 +20,13 @@ import { ColumnsType } from 'antd/es/table';
 import { AxiosResponse } from 'axios';
 import moment from 'moment';
 import { useEffect, useMemo, useState } from 'react';
-import { SaveOutlined, RollbackOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  SaveOutlined,
+  RollbackOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
 import { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 
@@ -105,7 +111,7 @@ export default function Login() {
   const columns: ColumnsType<DataType> = [
     {
       dataIndex: 'coldWater',
-      title: 'холодная вода',
+      title: 'Холодная вода, м³',
       render: (name, record) => {
         return (
           <>
@@ -120,7 +126,7 @@ export default function Login() {
     },
     {
       dataIndex: 'hotWater',
-      title: 'Горячая вода',
+      title: 'Горячая вода, м³',
       render: (name, record) => {
         return (
           <>
@@ -143,7 +149,7 @@ export default function Login() {
     },
     {
       dataIndex: 'electric',
-      title: 'Электричество',
+      title: 'Электричество, Кв/ч',
 
       render: (name, record) => {
         return (
@@ -167,7 +173,7 @@ export default function Login() {
     },
     {
       dataIndex: 'createDate',
-      title: 'Дата добавления',
+      title: 'Дата добавления ',
 
       render: (name, record) => {
         return (
@@ -185,7 +191,7 @@ export default function Login() {
             ) : (
               // <DatePicker locale={locale} disabled value={dayjs(name)} />
 
-              <>{dayjs(name).format('YYYY/MM/DD')}</>
+              <>{dayjs(name).format('DD.MM.YYYY')}</>
             )}
           </>
         );
@@ -194,7 +200,7 @@ export default function Login() {
     },
     {
       dataIndex: 'id',
-      title: 'К оплате',
+      title: 'К оплате, руб.',
       render: (val, obj, index) => {
         if (index > 0) {
           return (
@@ -208,6 +214,8 @@ export default function Login() {
             )
           );
           //  (bills[index].electric - bills[index - 1].electric) * user.ratioElec;
+        } else {
+          return <>-</>;
         }
       },
     },
@@ -224,6 +232,8 @@ export default function Login() {
                     onClick={() => {
                       editBill(currentBill, id);
                     }}
+                    type="primary"
+                    ghost
                     // style={{ backgroundColor: '#OD2231' }}
                     shape="circle">
                     <SaveOutlined />
@@ -231,7 +241,7 @@ export default function Login() {
                 </Tooltip>
                 <Tooltip title="Отменить изменения">
                   <Button
-                    style={{ padding: 0 }}
+                    style={{ color: '#297ea0', borderColor: '#297ea0' }}
                     onClick={() => resetChanges()}
                     type="primary"
                     shape="circle"
@@ -243,14 +253,14 @@ export default function Login() {
             ) : (
               <Tooltip title="Редактировать запись">
                 <Button
-                  style={{ color: '#0D2231', borderColor: '#0D2231' }}
+                  style={{ color: '#297ea0', borderColor: '#297ea0' }}
                   onClick={async () => {
                     await resetChanges();
                     await editData(record);
                   }}
                   shape="circle"
                   ghost>
-                  <EditOutlined style={{ color: '#0D2231' }} />
+                  <EditOutlined style={{ color: '#297ea0' }} />
                 </Button>
               </Tooltip>
             )}
@@ -263,7 +273,12 @@ export default function Login() {
                 // GuidesApi.deleteItem(this.props.endpoint, id).then(() => this.getAllData());
               }}>
               <Tooltip title="Удалить запись">
-                <Button className="actionRedButton" type="primary" shape="circle" ghost>
+                <Button
+                  style={{ color: '#297ea0', borderColor: '#297ea0' }}
+                  className="actionRedButton"
+                  type="primary"
+                  shape="circle"
+                  ghost>
                   <DeleteOutlined />
                 </Button>
               </Tooltip>
@@ -280,12 +295,27 @@ export default function Login() {
     return (arr + arr2) * kef;
   };
   const { data } = useAxiosFetch(Kommunalka.getBills);
-  let node: any = document?.getElementById('my-node');
+
+  let node: any;
+  if (typeof window === 'object') {
+    // Check if document is finally loaded
+    document.addEventListener('DOMContentLoaded', function () {
+      alert('Finished loading');
+
+      node = document?.getElementById('my-node');
+    });
+  }
+  if (process.browser) {
+    document.addEventListener('DOMContentLoaded', function () {
+      alert('Finished loading');
+      node = document?.getElementById('my-node');
+    });
+  }
+
   useEffect(() => {
     setBills(data);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    node = document?.getElementById('my-node');
 
     console.log('updated');
     form.setFieldsValue({
@@ -336,6 +366,7 @@ export default function Login() {
         labelCol={{
           span: 8,
         }}
+        style={{ height: '100%' }}
         labelWrap
         colon={false}
         labelAlign="left"
@@ -351,7 +382,7 @@ export default function Login() {
         <Form.Item
           label="Горячая вода"
           name="hotWater"
-          // style={{ WebkitTextFillColor: '#ffffffe0' }}
+          style={{ WebkitTextFillColor: '#ffffffe0' }}
           // initialValue={bills[bills.length - 1]?.hotWater}
         >
           <InputNumber style={{ width: '100%' }} />
@@ -360,22 +391,22 @@ export default function Login() {
         <Form.Item
           label="Холодная вода"
           name="coldWater"
-          // style={{ WebkitTextFillColor: '#ffffffe0' }}
+          style={{ WebkitTextFillColor: '#ffffffe0' }}
           // initialValue={bills[bills.length - 1]?.coldWater}
         >
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item
           label="Электричество"
-          // style={{ WebkitTextFillColor: '#ffffffe0' }}
+          style={{ WebkitTextFillColor: '#ffffffe0', fontSize: '30px' }}
           name="electric"
-          labelCol={{ span: 24 }}
+          // labelCol={{ span: 24 }}
           // initialValue={bills[bills.length - 1]?.electric}
         >
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item
-          // style={{ WebkitTextFillColor: '#ffffffe0' }}
+          style={{ WebkitTextFillColor: '#ffffffe0' }}
           label="Дата внесения"
           name="createDate">
           <DatePicker style={{ width: '100%' }} />
@@ -387,6 +418,60 @@ export default function Login() {
           </Button>
         </Form.Item>
       </Form>
+    );
+  };
+
+  const RendCard = () => {
+    return (
+      <Card
+        id="my-node"
+        style={{
+          backgroundColor: '#0D2231',
+          height: '100%',
+          // background: 'rgb(13,34,49)',
+          background:
+            'linear-gradient(63deg, rgba(13,34,49,1) 10%, rgba(17,90,120,1) 71%, rgba(47,134,170,1) 100%)',
+        }}>
+        <Space direction="vertical">
+          <Title style={{ color: 'white' }}>
+            Горячая вода: {bills[bills.length - 1]?.hotWater} м³{' '}
+          </Title>
+          <Title style={{ color: 'white' }}>
+            Холодная вода: {bills[bills.length - 1]?.coldWater} м³{' '}
+          </Title>
+          <Title style={{ color: 'white' }}>
+            Электричество: {bills[bills.length - 1]?.electric} Кв/ч{' '}
+          </Title>
+
+          <Title style={{ color: 'white' }}>
+            К оплате:{' '}
+            {totalSumm(
+              user.ratioElec,
+              bills[bills.length - 2]?.electric,
+              bills[bills.length - 1]?.electric,
+            ) +
+              totalSumm(
+                user.ratioCold,
+                bills[bills.length - 2]?.coldWater,
+                bills[bills.length - 1]?.coldWater,
+              ) +
+              totalSumm(
+                user.ratioHot,
+                bills[bills.length - 2]?.hotWater,
+                bills[bills.length - 1]?.hotWater,
+              ) +
+              summOfOtvod(
+                user.avatarUrl,
+                bills[bills.length - 1]?.hotWater - bills[bills.length - 2]?.hotWater,
+                bills[bills.length - 1]?.coldWater - bills[bills.length - 2]?.coldWater,
+              )}{' '}
+            руб.
+          </Title>
+          <Text style={{ position: 'absolute', color: 'white', bottom: 50, right: 50 }}>
+            Показания от: {`${dayjs(bills[bills.length - 1]?.createDate).format('DD.MM.YYYY')}`}
+          </Text>
+        </Space>
+      </Card>
     );
   };
 
@@ -404,74 +489,31 @@ export default function Login() {
           <Card style={{ backgroundColor: '#0D2231' }}> {renderForm()}</Card>
         </Col>
         <Col span={16}>
-          <Button
-            onClick={() => {
-              if (node) {
-                htmlToImage
-                  .toPng(node)
-                  .then(function (dataUrl) {
-                    var img = new Image();
-                    img.src = dataUrl;
-                    // document.body.appendChild(img);
+          <Tooltip title="Скачать показатели в формате PNG">
+            <Button
+              ghost
+              style={{ position: 'absolute', right: 30, top: 10, zIndex: '1000' }}
+              onClick={() => {
+                if (document?.getElementById('my-node') as HTMLInputElement) {
+                  htmlToImage
+                    .toPng(document?.getElementById('my-node') as HTMLInputElement)
+                    .then(function (dataUrl) {
+                      var img = new Image();
+                      img.src = dataUrl;
+                      // document.body.appendChild(img);
 
-                    download(dataUrl, 'my-node.png');
-                  })
-                  .catch(function (error) {
-                    console.error('oops, something went wrong!', error);
-                  });
-              }
-            }}>
-            test
-          </Button>
-          <Card
-            id="my-node"
-            style={{
-              backgroundColor: '#0D2231',
-              height: '100%',
-              // background: 'rgb(13,34,49)',
-              background:
-                'linear-gradient(63deg, rgba(13,34,49,1) 10%, rgba(17,90,120,1) 71%, rgba(47,134,170,1) 100%)',
-            }}>
-            <Space direction="vertical">
-              <Title style={{ color: 'white' }}>
-                Горячая вода: {bills[bills.length - 1]?.hotWater} м³{' '}
-              </Title>
-              <Title style={{ color: 'white' }}>
-                Холодная вода: {bills[bills.length - 1]?.coldWater} м³{' '}
-              </Title>
-              <Title style={{ color: 'white' }}>
-                Электричество: {bills[bills.length - 1]?.electric} Кв/ч{' '}
-              </Title>
+                      download(dataUrl, 'my-node.png');
+                    })
+                    .catch(function (error) {
+                      console.error('oops, something went wrong!', error);
+                    });
+                }
+              }}>
+              <CopyOutlined />
+            </Button>
+          </Tooltip>
 
-              <Title style={{ color: 'white' }}>
-                К оплате:{' '}
-                {totalSumm(
-                  user.ratioElec,
-                  bills[bills.length - 2]?.electric,
-                  bills[bills.length - 1]?.electric,
-                ) +
-                  totalSumm(
-                    user.ratioCold,
-                    bills[bills.length - 2]?.coldWater,
-                    bills[bills.length - 1]?.coldWater,
-                  ) +
-                  totalSumm(
-                    user.ratioHot,
-                    bills[bills.length - 2]?.hotWater,
-                    bills[bills.length - 1]?.hotWater,
-                  ) +
-                  summOfOtvod(
-                    user.avatarUrl,
-                    bills[bills.length - 1]?.hotWater - bills[bills.length - 2]?.hotWater,
-                    bills[bills.length - 1]?.coldWater - bills[bills.length - 2]?.coldWater,
-                  )}{' '}
-                руб.
-              </Title>
-              <Text style={{ position: 'absolute', color: 'white', bottom: 50, right: 50 }}>
-                Показания от: {`${dayjs(bills[bills.length - 1]?.createDate).format('DD.MM.YYYY')}`}
-              </Text>
-            </Space>
-          </Card>
+          {RendCard()}
         </Col>
       </Row>
     </Card>

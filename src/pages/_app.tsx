@@ -16,10 +16,11 @@ export default function App({ Component, pageProps }: AppProps) {
           colorBgBase: '#f2f7fb',
           colorTextBase: '#0d2231',
         },
+
         // components: {
         //   Table: {
-        //     colorTextHeading: '#E3EDF5',
-        //     colorBgContainer: '#b4c2c6',
+        //     colorBgContainer: '#70b6d2',
+
         //   },
         // },
       }}>
