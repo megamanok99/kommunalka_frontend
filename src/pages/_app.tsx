@@ -1,12 +1,35 @@
 import '@/styles/globals.css';
-import { ConfigProvider, theme } from 'antd';
+import { Avatar, ConfigProvider, Space, theme, Typography } from 'antd';
 import type { AppProps } from 'next/app';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import {
+  AppstoreAddOutlined,
+  LineChartOutlined,
+  LoginOutlined,
+  PoweroffOutlined,
+  UploadOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from '@ant-design/icons';
 import { Button, Layout, Menu } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Kommunalka from '@/ApiConnecor/Auth';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+
 // import { Content, Footer, Header } from 'antd/es/layout/layout';
 const { Header, Content, Footer, Sider } = Layout;
+const { Title, Text } = Typography;
 export default function App({ Component, pageProps }: AppProps) {
+  const [user, setUser] = useState<any>({});
+  const router = useRouter();
+  useEffect(() => {
+    Kommunalka.Authme()
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <ConfigProvider
       theme={{
@@ -25,45 +48,82 @@ export default function App({ Component, pageProps }: AppProps) {
         // },
       }}>
       <Layout>
-        <Sider
-          breakpoint="lg"
-          collapsedWidth="0"
-          onBreakpoint={(broken) => {
-            console.log(broken);
-          }}
-          onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
-          }}>
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={['4']}
-            items={[UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-              (icon, index) => ({
-                key: String(index + 1),
-                icon: React.createElement(icon),
-                label: `nav ${index + 1}`,
-              }),
-            )}
-          />
-        </Sider>
         <Layout>
           <Header>
-            <Button>test</Button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Link href={'/'}>
+                <Title className="gradient-text">KOMMUNALKA</Title>
+              </Link>
+
+              <Space style={{ float: 'right' }}>
+                <div>
+                  <Text strong style={{ color: '#f2f7fb' }}>
+                    {user?.fullName}
+                  </Text>
+                </div>
+
+                {/* <AppNavigation />
+                <BadgeBell /> */}
+                {user._id ? (
+                  <>
+                    <Link href={'/userpage'}>
+                      <Button
+                        shape={'circle'}
+                        size="large"
+                        icon={<AppstoreAddOutlined />}
+                        // onClick={this.props.exitUser}
+                      ></Button>
+                    </Link>
+
+                    <Link href={'/dashboard'}>
+                      <Button
+                        shape={'circle'}
+                        size="large"
+                        icon={<LineChartOutlined />}
+                        // onClick={this.props.exitUser}
+                      ></Button>
+                    </Link>
+
+                    <Link href={'/portfolio'}>
+                      <Button
+                        shape={'circle'}
+                        size="large"
+                        icon={<UserOutlined />}
+                        // onClick={this.props.exitUser}
+                      ></Button>
+                    </Link>
+                    <Link href={'/'}>
+                      <Button
+                        shape={'circle'}
+                        size="large"
+                        icon={<PoweroffOutlined />}
+                        onClick={() => {
+                          sessionStorage.removeItem('token');
+                        }}></Button>
+                    </Link>
+                  </>
+                ) : (
+                  <Link href={'/login'}>
+                    <Button
+                      shape={'circle'}
+                      size="large"
+                      icon={<LoginOutlined />}
+                      // onClick={this.props.exitUser}
+                    ></Button>
+                  </Link>
+                )}
+              </Space>
+            </div>
           </Header>
 
-          <Content
-            style={{
-              margin: '24px 16px 0',
-            }}>
+          <Content style={{}}>
             <Component {...pageProps} />
           </Content>
           <Footer
             style={{
               textAlign: 'center',
             }}>
-            Ant Design ©2023 Created by Ant UED
+            Alex gorbunov ©2023 Created by Flareon
           </Footer>
         </Layout>
       </Layout>
