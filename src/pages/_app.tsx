@@ -84,7 +84,7 @@ export default function App({ Component, pageProps }: AppProps) {
                       ></Button>
                     </Link>
 
-                    <Link href={'/portfolio'}>
+                    <Link href={'/aboutme'}>
                       <Button
                         shape={'circle'}
                         size="large"

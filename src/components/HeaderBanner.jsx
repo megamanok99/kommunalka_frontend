@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import TweenOne from 'rc-tween-one';
+import TweenOne from 'rc-tween-one/lib/TweenOne';
 // import rc from 'rc-tween-one';
 // TweenOne.plugins.push(SvgDrawPlugin);
 export default function HeaderBanner() {
+  // let TweenOne = require('rc-tween-one');
   let delay = 0;
   function setAddDelay() {
     delay += 100;

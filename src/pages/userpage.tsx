@@ -321,6 +321,15 @@ export default function Login() {
     form.setFieldsValue({
       electric: data[data.length - 1]?.electric,
     });
+    form.setFieldsValue({
+      hotWater: data[data.length - 1]?.hotWater,
+    });
+    form.setFieldsValue({
+      coldWater: data[data.length - 1]?.coldWater,
+    });
+    form.setFieldsValue({
+      createDate: dayjs(),
+    });
     Kommunalka.Authme()
       .then((res) => {
         setUser(res.data);
@@ -380,34 +389,23 @@ export default function Login() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}>
         <Form.Item
-          label="Горячая вода"
-          name="hotWater"
-          style={{ WebkitTextFillColor: '#ffffffe0' }}
-          // initialValue={bills[bills.length - 1]?.hotWater}
-        >
+          label={<Text style={{ WebkitTextFillColor: '#ffffffe0' }}>Горячая вода</Text>}
+          name="hotWater">
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item
-          label="Холодная вода"
-          name="coldWater"
-          style={{ WebkitTextFillColor: '#ffffffe0' }}
-          // initialValue={bills[bills.length - 1]?.coldWater}
-        >
+          label={<Text style={{ WebkitTextFillColor: '#ffffffe0' }}>Холодная вода</Text>}
+          name="coldWater">
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item
-          label="Электричество"
-          style={{ WebkitTextFillColor: '#ffffffe0', fontSize: '30px' }}
-          name="electric"
-          // labelCol={{ span: 24 }}
-          // initialValue={bills[bills.length - 1]?.electric}
-        >
+          label={<Text style={{ WebkitTextFillColor: '#ffffffe0' }}>Электричество</Text>}
+          name="electric">
           <InputNumber style={{ width: '100%' }} />
         </Form.Item>
         <Form.Item
-          style={{ WebkitTextFillColor: '#ffffffe0' }}
-          label="Дата внесения"
+          label={<Text style={{ WebkitTextFillColor: '#ffffffe0' }}>Дата</Text>}
           name="createDate">
           <DatePicker style={{ width: '100%' }} />
         </Form.Item>
