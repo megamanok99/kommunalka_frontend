@@ -36,6 +36,22 @@ class Kommunalka {
   static updateBill(obj: any, id: 'string') {
     return RestClient.patchAxios(cred + `/bills/${id}`, obj);
   }
+  static getMultipleLinePlot() {
+    return RestClient.getAxios(cred + '/multiple-line-plot');
+  }
+
+  static getMeterGaugePlot() {
+    return RestClient.getAxios(cred + '/meter-gauge-plot');
+  }
+  static getLiquidElectric() {
+    return RestClient.getAxios(cred + '/liquid-electric');
+  }
+  static getLiquidCold() {
+    return RestClient.getAxios(cred + '/liquid-cold');
+  }
+  static getLiquidHot() {
+    return RestClient.getAxios(cred + '/liquid-hot');
+  }
 }
 
 export default Kommunalka;
