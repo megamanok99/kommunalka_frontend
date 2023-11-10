@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { Liquid } from '@ant-design/plots';
+import { useEffect, useState } from 'react';
 
 export const LiquidPlot = ({ config, url }) => {
   const [data, setData] = useState(0);
@@ -29,5 +27,5 @@ export const LiquidPlot = ({ config, url }) => {
   //     type: 'line',
   //   },
   // };
-  return <Liquid {...config} percent={data} />;
+  return;
 };

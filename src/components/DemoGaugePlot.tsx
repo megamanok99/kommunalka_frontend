@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { Gauge } from '@ant-design/plots';
 import Kommunalka from '@/ApiConnecor/Auth';
+import { useEffect, useState } from 'react';
 
 export const DemoGauge = () => {
   const [data, setData] = useState(0);
@@ -47,5 +45,5 @@ export const DemoGauge = () => {
       },
     },
   };
-  return <Gauge {...config} />;
+  return;
 };

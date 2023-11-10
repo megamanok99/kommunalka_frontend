@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { Line } from '@ant-design/plots';
 import Kommunalka from '@/ApiConnecor/Auth';
+import { useEffect, useState } from 'react';
 
 export const DemoLine = () => {
   const [data, setData] = useState([]);
@@ -40,5 +38,5 @@ export const DemoLine = () => {
     },
   };
 
-  return <Line {...config} />;
+  return;
 };

@@ -1,43 +1,9 @@
 import Kommunalka from '@/ApiConnecor/Auth';
-import useAxiosFetch from '@/customHook/useAxiosFetch';
-import useFetchData from '@/customHook/userData';
-import {
-  Table,
-  Card,
-  Form,
-  Input,
-  Button,
-  InputNumber,
-  DatePicker,
-  Row,
-  Col,
-  Space,
-  Tooltip,
-  Popconfirm,
-  Typography,
-} from 'antd';
-import { ColumnsType } from 'antd/es/table';
-import { AxiosResponse } from 'axios';
-import moment from 'moment';
-import { useEffect, useMemo, useState } from 'react';
-import {
-  SaveOutlined,
-  RollbackOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  CopyOutlined,
-} from '@ant-design/icons';
-import { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
+import { Card, Form, Typography } from 'antd';
+import { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/router';
-import * as htmlToImage from 'html-to-image';
-import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
-import download from 'downloadjs';
 import { DataType, userModel } from '@/interface';
-import { DemoLine } from '@/components/MultipleLinePlot';
-import { DemoGauge } from '@/components/DemoGaugePlot';
-import { LiquidPlot } from '../components/LiquidPlot';
+import { useRouter } from 'next/router';
 const { Title, Text } = Typography;
 
 export default function Aboutme() {
@@ -66,7 +32,7 @@ export default function Aboutme() {
 
   return (
     <Card style={{ backgroundColor: '#E3EDF5', height: '100vh' }}>
-      <Row
+      {/* <Row
         gutter={[32, 32]}
         style={{
           backgroundColor: '#ffffff',
@@ -200,7 +166,7 @@ export default function Aboutme() {
             url={Kommunalka.getLiquidElectric}
           />
         </Col>
-      </Row>
+      </Row> */}
     </Card>
   );
 }
