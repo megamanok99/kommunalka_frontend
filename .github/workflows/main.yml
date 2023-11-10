@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: 🔨 clean prod
+        run: |
+          npm cache clean --force
+      - name: 🔨 dependecies
+        run: |
+          npm install
+      - name: 🔨 Build Project
+      
+        run: |
+          npm run build
+   
+      - name: Docker Build image
+        run: |
+          echo "Build Started..."
+          docker build --pull --rm -f "Dockerfile" -t kommunalka-frontend:latest "."
+      - name: Docker Compose
+        run: |
+          echo "Compose Started..."
+          docker-compose up -d
